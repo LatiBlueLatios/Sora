@@ -52,7 +52,7 @@ Haruka is a bare-bones, no-frills web component manager for developers who think
     myComponent.increaseAwesomeness();
     ```
 
-4.Bask in the glory of your lightweight, framework-free component.
+5. Bask in the glory of your lightweight, framework-free component.
 
 ## What can Haruka do?
 
@@ -82,6 +82,7 @@ It can:
 ## Planned Features
 
 - Integration with Sakura when I finish its development.
+- Add support for importing via custom paths.
 - Revisit after I've had enough experience using this module.
 
 ## Inspiration

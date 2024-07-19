@@ -41,7 +41,7 @@ class Haruka extends SoulDew {
 
     createHTMLElement(template) {
         const wrapperDiv = document.createElement("div");
-        wrapperDiv.innerHTML = template.trim();
+        wrapperDiv.innerHTML = template;
         return wrapperDiv.firstElementChild;
     }
 

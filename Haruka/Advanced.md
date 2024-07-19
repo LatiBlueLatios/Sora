@@ -6,16 +6,17 @@ First things first, let's break down this bad boy:
 
 ```javascript
 class Haruka extends SoulDew {
+    #templateName
+    element = null;
+    state = {};
+
     constructor(templateName) {
         super();
-        this.templateName = templateName;
-        this.element = null;
-        this.state = {};
+        this.#templateName = templateName;
         this.init();
     }
     // ... more awesome stuff here
 }
-
 ```
 
 ### Constructor
