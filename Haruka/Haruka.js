@@ -1,29 +1,41 @@
-class Haruka extends SoulDew {
+class Haruka {
     #templateName;
     element = null;
     state = {};
+    #initPromise = null;
+    #isInitialized = false;
 
     constructor(templateName) {
-        super();
-
         this.#templateName = templateName;
         this.init();
     }
 
-    async init() {
-        try {
-            const template = await this.fetchTemplate();
-            this.element = this.createHTMLElement(template);
-            this.render();
-            this.onMount();
-        } catch (error) {
-            this.handleError(error);
+    init() {
+        if (!this.#initPromise) {
+            this.#initPromise = this.#initializeComponent().then(() => {
+                this.#isInitialized = true;
+                 // Clear the promise to free memory
+                this.#initPromise = null;
+            }).catch(error => {
+                this.handleError(error);
+                // Re-throw to keep the promise rejected
+                throw error;
+            });
         }
+
+        return this.#initPromise;
+    }
+
+    async #initializeComponent() {
+        const template = await this.fetchTemplate();
+        this.element = this.createHTMLElement(template);
+        this.render();
+        this.onMount();
     }
 
     handleError(error) {
-        console.error("Haruka Error:", error);
         // Override this method in child classes for custom error handling
+        console.error("Haruka Error:", error);
     }
 
     onMount() {
@@ -32,7 +44,7 @@ class Haruka extends SoulDew {
     }
 
     async fetchTemplate() {
-        const response = await fetch(`.components/templates/${this.#templateName}.html`);
+        const response = await fetch(`components/templates/${this.#templateName}.html`);
         if (!response.ok) {
             throw new Error(`Failed to fetch template: ${this.#templateName}`);
         }
@@ -41,7 +53,7 @@ class Haruka extends SoulDew {
 
     createHTMLElement(template) {
         const wrapperDiv = document.createElement("div");
-        wrapperDiv.innerHTML = template;
+        wrapperDiv.innerHTML = template.trim();
         return wrapperDiv.firstElementChild;
     }
 
@@ -84,7 +96,9 @@ class Haruka extends SoulDew {
         this.handleError(new Error("render method must be implemented"));
     }
 
-    append(target) {
+    async append(target) {
+        await this.init();
+
         if (this.element) {
             target.appendChild(this.element);
         } else {
@@ -92,11 +106,13 @@ class Haruka extends SoulDew {
         }
     }
 
-    appendTo(selector) {
+    async appendTo(selector) {
         if (typeof selector !== "string") {
             this.handleError(new Error("selector must be a string"));
             return;
         }
+
+        await this.init();
 
         const target = document.querySelector(selector);
         if (target) {
@@ -111,15 +127,11 @@ class Haruka extends SoulDew {
     }
 
     show() {
-        if (this.element) {
-            this.element.style.display = "block";
-        }
+        this.element.style.display = "block";
     }
 
     hide() {
-        if (this.element) {
-            this.element.style.display = "none";
-        }
+        this.element.style.display = "none";
     }
 
     isVisible() {
@@ -153,7 +165,6 @@ class Haruka extends SoulDew {
     
     clearTimers() {
         // Implement this in child classes if needed
-        this.handleError(new Error("clearTimers method must be implemented"));
     }    
 
     remove() {

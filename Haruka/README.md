@@ -83,6 +83,7 @@ It can:
 
 - Integration with Sakura when I finish its development.
 - Add support for importing via custom paths.
+- Add CSS Templates
 - Revisit after I've had enough experience using this module.
 
 ## Inspiration

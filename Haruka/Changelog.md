@@ -1,5 +1,17 @@
 # Haruka Changelog
 
+## [1.0.1] Fixes and Improvements
+
+Please use this version. Past versions literally do not work.
+
+### Changed
+
+- Refactored overall initialization logic to fix asynchronous issues
+
+### Removed
+
+- SoulDew, as it was uneeded in the base of the code.
+
 ## [1.0.0] - 2024-7-19
 
 First official release version, yay!
