@@ -71,7 +71,8 @@ class Haruka {
             const actionElements = this.element.querySelectorAll("[data-action]");
             actionElements.forEach(el => {
                 const action = el.dataset.action;
-                const eventType = el.dataset.event || "click";
+                // First is just for fallback, requires manual implementation
+                const eventType = el.dataset.event || this.getDefaultEventType(el);
                 el.addEventListener(eventType, (e) => {
                     if (typeof this[action] === "function") {
                         this[action](e);
@@ -80,6 +81,27 @@ class Haruka {
             });
         }
     }    
+
+    // idk how to make this dynamic, probably can't
+    // resort to mappings as a result (pretty bad ik)
+    getDefaultEventType(element) {
+        const defaultEvents = {
+            "a": "click",
+            "button": "click",
+            "form": "submit",
+            "input": "input",
+            "select": "change",
+            "textarea": "input",
+            "img": "load",
+            "video": "play",
+            "audio": "play",
+            "details": "toggle",
+            // Might add more if needed. For now, these are the most common elements
+        };
+
+        const tagName = element.tagName.toLowerCase();
+        return defaultEvents[tagName] || "click";
+    }  
 
     setCSSProperty(property, value) {
         if (this.element) {
