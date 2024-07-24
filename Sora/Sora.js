@@ -38,14 +38,15 @@ class SoulDew {
         if (typeof event !== "string") throw new Error("Event must be a string");
         if (typeof listener !== "function") throw new Error("Listener must be a function");
 
+        const removeListener = (listeners) => listeners.filter(e => e.listener !== listener);
         if (event === "*") {
-            this.#wildcardListeners = this.#wildcardListeners.filter(e => e.listener !== listener);
-            return;
-        }
-        if (this.#listeners.has(event)) {
-            this.#listeners.set(event, this.#listeners.get(event).filter(e => e.listener !== listener));
-            if (this.#listeners.get(event).length === 0) {
+            this.#wildcardListeners = removeListener(this.#wildcardListeners);
+        } else if (this.#listeners.has(event)) {
+            const updatedListeners = removeListener(this.#listeners.get(event));
+            if (updatedListeners.length === 0) {
                 this.#listeners.delete(event);
+            } else {
+                this.#listeners.set(event, updatedListeners);
             }
         }
     }
