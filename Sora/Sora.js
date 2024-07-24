@@ -35,7 +35,8 @@ class SoulDew {
      * @throws {Error} If event is not a string or listener is not a function.
      */
     off(event, listener) {
-        if (typeof event !== "string" || typeof listener !== "function") throw new Error("Invalid arguments");
+        if (typeof event !== "string") throw new Error("Event must be a string");
+        if (typeof listener !== "function") throw new Error("Listener must be a function");
 
         if (event === "*") {
             this.#wildcardListeners = this.#wildcardListeners.filter(e => e.listener !== listener);
