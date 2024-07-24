@@ -99,7 +99,7 @@ class SoulDew {
         for (const event of listeners) {
             event.listener(...rest);
             if (this.#isCancelled) break;
-            if (event.once === 0) {
+            if (event.once === false) {
                 remainingListeners.push(event);
             }
         }
