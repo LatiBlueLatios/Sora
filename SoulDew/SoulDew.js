@@ -31,7 +31,7 @@ class SoulDew {
     /**
      * Removes an event listener.
      * @param {string} event - The name of the event to remove the listener from.
-     * @param {function} listener - The callback function to remove.
+     * @param {function} listenear - The callback function to remove.
      * @throws {Error} If event is not a string or listener is not a function.
      */
     off(event, listener) {
@@ -49,7 +49,7 @@ class SoulDew {
             }
         }
     }
-    
+
     /**
      * @private
      */
