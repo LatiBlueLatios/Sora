@@ -38,17 +38,23 @@ class SoulDew {
         if (typeof event !== "string") throw new Error("Event must be a string");
         if (typeof listener !== "function") throw new Error("Listener must be a function");
 
-        const removeListener = (listeners) => listeners.filter(e => e.listener !== listener);
         if (event === "*") {
-            this.#wildcardListeners = removeListener(this.#wildcardListeners);
+            this.#wildcardListeners =this.#removeListener(this.#wildcardListeners, listener);
         } else if (this.#listeners.has(event)) {
-            const updatedListeners = removeListener(this.#listeners.get(event));
+            const updatedListeners = this.#removeListener(this.#listeners.get(event), listener);
             if (updatedListeners.length === 0) {
                 this.#listeners.delete(event);
             } else {
                 this.#listeners.set(event, updatedListeners);
             }
         }
+    }
+    
+    /**
+     * @private
+     */
+    #removeListener(listeners, listener) {
+        return listeners.filter(e => e.listener !== listener);
     }
 
     /**
@@ -60,7 +66,7 @@ class SoulDew {
      */
     emit(event, ...rest) {
         if (typeof event !== "string") throw new Error("Invalid arguments");
-        
+
         this.#isCancelled = false;
 
         if (this.#listeners.has(event)) {
@@ -102,6 +108,14 @@ class SoulDew {
      */
     cancel() {
         this.#isCancelled = true;
+    }
+
+    /**
+     * Clears all event listeners.
+     */
+    clearAllListeners() {
+        this.#listeners.clear();
+        this.#wildcardListeners = [];
     }
 }
 
