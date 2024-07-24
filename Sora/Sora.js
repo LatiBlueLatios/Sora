@@ -67,7 +67,7 @@ class SoulDew {
             this.#listeners.set(event, this.#callListeners(listeners, ...rest));
             if (this.#isCancelled) return false;
         } else {
-            console.warn(`Event ${event} has no listener!`);
+            console.warn(`Event "${event}" has no listeners. Ensure the event name is correct and listeners are registered.`);
             return true;
         }
 
