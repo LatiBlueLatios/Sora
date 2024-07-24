@@ -89,8 +89,8 @@ describe('SoulDew', () => {
     });
 
     it('emit warns when no listeners for an event', () => {
-        const consoleWarn = sinon.stub(console, 'warn');
+        const consoleError = sinon.stub(console, 'error');
         soulDew.emit('nonexistentEvent');
-        expect(consoleWarn.calledWith('Event "nonexistentEvent" has no listeners. Ensure the event name is correct and listeners are registered.')).to.be.true;
+        expect(consoleError.calledWith('Event "nonexistentEvent" has no listeners. Ensure the event name is correct and listeners are registered.')).to.be.true;
     });
 });

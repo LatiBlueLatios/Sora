@@ -39,7 +39,7 @@ class SoulDew {
         if (typeof listener !== "function") throw new Error("Listener must be a function");
 
         if (event === "*") {
-            this.#wildcardListeners =this.#removeListener(this.#wildcardListeners, listener);
+            this.#wildcardListeners = this.#removeListener(this.#wildcardListeners, listener);
         } else if (this.#listeners.has(event)) {
             const updatedListeners = this.#removeListener(this.#listeners.get(event), listener);
             if (updatedListeners.length === 0) {
@@ -58,7 +58,7 @@ class SoulDew {
     }
 
     /**
-     * Emits an event, calling all listeners registered for that event.
+     * Emits an event, calling all listeners registered for that event and all wildcard listeners.
      * @param {string} event - The name of the event to emit.
      * @param {...*} rest - Additional arguments to pass to the event listeners.
      * @returns {boolean} False if the event was cancelled, true otherwise.
@@ -68,17 +68,21 @@ class SoulDew {
         if (typeof event !== "string") throw new Error("Invalid arguments");
 
         this.#isCancelled = false;
+        let hasListeners = false;
 
         if (this.#listeners.has(event)) {
             const listeners = this.#listeners.get(event);
             this.#listeners.set(event, this.#callListeners(listeners, ...rest));
+            hasListeners = true;
             if (this.#isCancelled) return false;
-        } else {
-            console.error(`Event "${event}" has no listeners. Ensure the event name is correct and listeners are registered.`);
-            return true;
         }
 
-        this.#wildcardListeners = this.#callListeners(this.#wildcardListeners, ...rest);
+        this.#wildcardListeners = this.#callListeners(this.#wildcardListeners, event, ...rest);
+
+        if (!hasListeners && this.#wildcardListeners.length === 0) {
+            console.error(`Event "${event}" has no listeners. Ensure the event name is correct and listeners are registered.`);
+        }
+
         return !this.#isCancelled;
     }
 
