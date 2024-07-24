@@ -1,4 +1,4 @@
-import SoulDew from '../SoulDew/SoulDew';
+import SoulDew from '../SoulDew/SoulDew.js';
 import { expect } from 'chai';
 import sinon from 'sinon';
 
