@@ -16,7 +16,7 @@ class SoulDew {
     on(event, listener, once = false) {
         if (typeof event !== "string") throw new Error("Event must be a string");
         if (typeof listener !== "function") throw new Error("Listener must be a function");
-        const eventObj = { listener, once: once ? 1 : 0 };
+        const eventObj = { listener, once };
 
         if (event === "*") {
             this.#wildcardListeners.push(eventObj);
@@ -31,7 +31,7 @@ class SoulDew {
     /**
      * Removes an event listener.
      * @param {string} event - The name of the event to remove the listener from.
-     * @param {function} listenear - The callback function to remove.
+     * @param {function} listener - The callback function to remove.
      * @throws {Error} If event is not a string or listener is not a function.
      */
     off(event, listener) {
@@ -74,7 +74,7 @@ class SoulDew {
             this.#listeners.set(event, this.#callListeners(listeners, ...rest));
             if (this.#isCancelled) return false;
         } else {
-            console.warn(`Event "${event}" has no listeners. Ensure the event name is correct and listeners are registered.`);
+            console.error(`Event "${event}" has no listeners. Ensure the event name is correct and listeners are registered.`);
             return true;
         }
 
